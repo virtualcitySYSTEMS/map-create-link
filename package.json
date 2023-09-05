@@ -1,0 +1,60 @@
+{
+  "name": "create-link",
+  "version": "1.0.0",
+  "description": "Plugin to copy app state to URL.",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "prepublishOnly": "vcmplugin build",
+    "build": "vcmplugin build",
+    "pack": "vcmplugin pack",
+    "start": "vcmplugin serve",
+    "preview": "vcmplugin preview",
+    "buildStagingApp": "vcmplugin buildStagingApp",
+    "lint:js": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts",
+    "lint:prettier": "prettier --check .",
+    "lint": "npm run lint:js && npm run lint:prettier",
+    "format": "prettier --write --list-different . && npm run lint:js -- --fix",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "author": "Ben Kuster <bkuster@vc.systems>",
+  "license": "MIT",
+  "keywords": [
+    "vcmap",
+    "plugin"
+  ],
+  "files": [
+    "src/",
+    "dist/",
+    "plugin-assets/",
+    "LICENSE.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "exports": {
+    ".": "./src/index.js",
+    "./dist": "./dist/index.js"
+  },
+  "eslintIgnore": [
+    "node_modules"
+  ],
+  "eslintConfig": {
+    "root": true,
+    "extends": "@vcsuite/eslint-config/vue"
+  },
+  "prettier": "@vcsuite/eslint-config/prettier.js",
+  "peerDependencies": {
+    "@vcmap/ui": "^5.0.0-rc.30",
+    "vue": "~2.7.3",
+    "vuetify": "~2.6.7"
+  },
+  "devDependencies": {
+    "@vcmap/plugin-cli": "^2.1.11",
+    "@vcsuite/eslint-config": "^3.0.3",
+    "@vitest/coverage-c8": "^0.33.0",
+    "jest-canvas-mock": "^2.5.2",
+    "jsdom": "^22.1.0",
+    "vitest": "^0.34.3"
+  }
+}
