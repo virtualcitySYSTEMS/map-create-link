@@ -1,5 +1,5 @@
 {
-  "name": "create-link",
+  "name": "@vcmap/create-link",
   "version": "1.0.0",
   "description": "Plugin to copy app state to URL.",
   "type": "module",
@@ -14,9 +14,7 @@
     "lint:js": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts",
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:js && npm run lint:prettier",
-    "format": "prettier --write --list-different . && npm run lint:js -- --fix",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "format": "prettier --write --list-different . && npm run lint:js -- --fix"
   },
   "author": "Ben Kuster <bkuster@vc.systems>",
   "license": "MIT",
@@ -27,7 +25,6 @@
   "files": [
     "src/",
     "dist/",
-    "plugin-assets/",
     "LICENSE.md",
     "README.md",
     "CHANGELOG.md"
@@ -37,7 +34,8 @@
     "./dist": "./dist/index.js"
   },
   "eslintIgnore": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ],
   "eslintConfig": {
     "root": true,
@@ -51,10 +49,6 @@
   },
   "devDependencies": {
     "@vcmap/plugin-cli": "^2.1.11",
-    "@vcsuite/eslint-config": "^3.0.3",
-    "@vitest/coverage-c8": "^0.33.0",
-    "jest-canvas-mock": "^2.5.2",
-    "jsdom": "^22.1.0",
-    "vitest": "^0.34.3"
+    "@vcsuite/eslint-config": "^3.0.3"
   }
 }

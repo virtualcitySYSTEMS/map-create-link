@@ -5,8 +5,8 @@ import {
   WindowSlot,
 } from '@vcmap/ui';
 import FallbackCreateLink from './fallbackCreateLink.vue';
+import { name, version } from '../package.json';
 
-const name = '@vcmap/create-link';
 const fallBackWindowId = 'create-link-fallback-window';
 function createFallbackWindow(app, link) {
   app.windowManager.remove(fallBackWindowId);
@@ -27,10 +27,13 @@ function createFallbackWindow(app, link) {
   );
 }
 
+/**
+ * @returns {import("@vcmap/ui").VcsPlugin}
+ */
 export default function createLink() {
   return {
     name,
-    version: '1.0.0',
+    version,
     i18n: {
       de: {
         createLink: {
@@ -53,9 +56,6 @@ export default function createLink() {
         },
       },
     },
-    /**
-     * @param {VcsUiApp} app
-     */
     initialize(app) {
       const title = navigator.clipboard
         ? 'createLink.copyToClipboard'
@@ -90,6 +90,15 @@ export default function createLink() {
         name,
         ButtonLocation.SHARE,
       );
+    },
+    toJSON() {
+      return {};
+    },
+    getDefaultOptions() {
+      return {};
+    },
+    getConfigEditors() {
+      return [];
     },
   };
 }
