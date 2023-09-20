@@ -5,7 +5,7 @@ import {
   WindowSlot,
 } from '@vcmap/ui';
 import FallbackCreateLink from './fallbackCreateLink.vue';
-import { name, version } from '../package.json';
+import { name, version, mapVersion } from '../package.json';
 
 const fallBackWindowId = 'create-link-fallback-window';
 function createFallbackWindow(app, link) {
@@ -32,8 +32,15 @@ function createFallbackWindow(app, link) {
  */
 export default function createLink() {
   return {
-    name,
-    version,
+    get name() {
+      return name;
+    },
+    get version() {
+      return version;
+    },
+    get mapVersion() {
+      return mapVersion;
+    },
     i18n: {
       de: {
         createLink: {
