@@ -2,13 +2,15 @@ import {
   ButtonLocation,
   NotificationType,
   setStateToUrl,
+  VcsPlugin,
+  VcsUiApp,
   WindowSlot,
 } from '@vcmap/ui';
 import FallbackCreateLink from './fallbackCreateLink.vue';
 import { name, version, mapVersion } from '../package.json';
 
 const fallBackWindowId = 'create-link-fallback-window';
-function createFallbackWindow(app, link) {
+function createFallbackWindow(app: VcsUiApp, link: string): void {
   app.windowManager.remove(fallBackWindowId);
   app.windowManager.add(
     {
@@ -30,15 +32,15 @@ function createFallbackWindow(app, link) {
 /**
  * @returns {import("@vcmap/ui").VcsPlugin}
  */
-export default function createLink() {
+export default function createLink(): VcsPlugin<never, never> {
   return {
-    get name() {
+    get name(): string {
       return name;
     },
-    get version() {
+    get version(): string {
       return version;
     },
-    get mapVersion() {
+    get mapVersion(): string {
       return mapVersion;
     },
     i18n: {
@@ -63,7 +65,7 @@ export default function createLink() {
         },
       },
     },
-    initialize(app) {
+    initialize(app: VcsUiApp): Promise<void> {
       const title = navigator.clipboard
         ? 'createLink.copyToClipboard'
         : 'createLink.tooltip';
@@ -97,15 +99,8 @@ export default function createLink() {
         name,
         ButtonLocation.SHARE,
       );
-    },
-    toJSON() {
-      return {};
-    },
-    getDefaultOptions() {
-      return {};
-    },
-    getConfigEditors() {
-      return [];
+
+      return Promise.resolve();
     },
   };
 }

@@ -1,20 +1,24 @@
 {
   "name": "@vcmap/create-link",
-  "version": "1.0.2",
+  "version": "2.0.0-rc.0",
   "description": "Plugin to copy app state to URL.",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prepublishOnly": "vcmplugin build",
     "build": "vcmplugin build",
-    "pack": "vcmplugin pack",
+    "bundle": "vcmplugin bundle",
     "start": "vcmplugin serve",
     "preview": "vcmplugin preview",
     "buildStagingApp": "vcmplugin buildStagingApp",
     "lint:js": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts",
     "lint:prettier": "prettier --check .",
     "lint": "npm run lint:js && npm run lint:prettier",
-    "format": "prettier --write --list-different . && npm run lint:js -- --fix"
+    "format": "prettier --write --list-different . && npm run lint:js -- --fix",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "type-check": "vue-tsc --noEmit",
+    "ensure-types": "vcmplugin ensure-types"
   },
   "author": "Ben Kuster <bkuster@vc.systems>",
   "license": "MIT",
@@ -25,31 +29,36 @@
   "files": [
     "src/",
     "dist/",
+    "plugin-assets/",
     "LICENSE.md",
     "README.md",
     "CHANGELOG.md"
   ],
   "exports": {
-    ".": "./src/index.js",
+    ".": "dist/index.js",
     "./dist": "./dist/index.js"
   },
   "eslintIgnore": [
     "node_modules",
-    "dist"
+    "dist",
+    "plugin-assets"
   ],
-  "eslintConfig": {
-    "root": true,
-    "extends": "@vcsuite/eslint-config/vue"
-  },
   "prettier": "@vcsuite/eslint-config/prettier.js",
   "peerDependencies": {
-    "@vcmap/ui": "^5.0.0",
-    "vue": "~2.7.3",
-    "vuetify": "~2.6.7"
+    "@vcmap/ui": "^6.0.0-rc.8",
+    "vue": "~3.4.38",
+    "vuetify": "^3.7.1"
   },
   "devDependencies": {
-    "@vcmap/plugin-cli": "^2.1.12",
-    "@vcsuite/eslint-config": "^3.0.3"
+    "@vcmap/plugin-cli": "^4.0.0-rc.5",
+    "@vcsuite/eslint-config": "^3.0.8",
+    "@vitest/coverage-v8": "^2.1.1",
+    "jest-canvas-mock": "^2.5.2",
+    "jsdom": "^24.1.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "typescript": "^5.6.2",
+    "vitest": "^2.1.1",
+    "vue-tsc": "^2.1.6"
   },
-  "mapVersion": "^5.0"
+  "mapVersion": "^6.0"
 }
