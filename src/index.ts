@@ -29,9 +29,6 @@ function createFallbackWindow(app: VcsUiApp, link: string): void {
   );
 }
 
-/**
- * @returns {import("@vcmap/ui").VcsPlugin}
- */
 export default function createLink(): VcsPlugin<never, never> {
   return {
     get name(): string {
@@ -48,7 +45,7 @@ export default function createLink(): VcsPlugin<never, never> {
         createLink: {
           title: 'Link kopieren',
           windowTitle: 'Anwendungslink',
-          tooltip: 'Dialog zum Kopieren des Anwendungslinks anzeigen',
+          createLink: 'Link erstellen',
           copyToClipboard: 'Anwendungslinks in Zwischenablage kopieren',
           refreshTooltip: 'Anwendungslinks aktualisieren',
           copied: 'Der Anwendungslink in wurde in die Zwischenablage kopiert.',
@@ -58,7 +55,7 @@ export default function createLink(): VcsPlugin<never, never> {
         createLink: {
           title: 'Copy link',
           windowTitle: 'Application link',
-          tooltip: 'Open dialog to copy application link to clipboard',
+          createLink: 'Create link',
           copyToClipboard: 'Copy application link to clipboard',
           refreshTooltip: 'Refresh application link',
           copied: 'Application link copied to clipboard.',
@@ -66,20 +63,18 @@ export default function createLink(): VcsPlugin<never, never> {
       },
     },
     initialize(app: VcsUiApp): Promise<void> {
-      const title = navigator.clipboard
-        ? 'createLink.copyToClipboard'
-        : 'createLink.tooltip';
+      const actionName = navigator.clipboard
+        ? 'createLink.title'
+        : 'createLink.createLink';
+      const title = navigator.clipboard ? 'createLink.copyToClipboard' : '';
 
       app.navbarManager.add(
         {
           action: {
-            name: 'createLink.title',
+            name: actionName,
             title,
             icon: 'mdi-share-variant',
-            /**
-             * @returns {Promise<void>}
-             */
-            async callback() {
+            async callback(): Promise<void> {
               const state = await app.getState(true);
               const url = new URL(window.location.href);
               setStateToUrl(state, url);

@@ -49,13 +49,13 @@
         icon="mdi-content-copy"
         class="mr-2"
         @click="copy"
-        :title="$t('createLink.copyToClipboard')"
+        :tooltip="$t('createLink.copyToClipboard')"
       />
       <VcsButton
         icon="mdi-refresh"
         class="mr-2"
         @click="refresh"
-        :title="$t('createLink.refreshTooltip')"
+        :tooltip="$t('createLink.refreshTooltip')"
       />
     </div>
   </v-sheet>
