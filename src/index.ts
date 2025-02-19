@@ -93,6 +93,7 @@ export default function createLink(): VcsPlugin<never, never> {
         },
         name,
         ButtonLocation.SHARE,
+        { desktop: true, tablet: true, mobile: true },
       );
 
       return Promise.resolve();
