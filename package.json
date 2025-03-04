@@ -1,6 +1,6 @@
 {
   "name": "@vcmap/create-link",
-  "version": "3.0.0-rc.0",
+  "version": "3.0.0",
   "description": "Plugin to copy app state to URL.",
   "type": "module",
   "main": "dist/index.js",
