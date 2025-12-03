@@ -1,5 +1,6 @@
+.vcs_pipeline_version: '1.0'
 default:
-  image: gitlab.virtualcitysystems.de:5050/vcsuite/devops/gitlabrunner/node:20-bullseye
+  image: gitlab.virtualcitysystems.de:5050/vcsuite/devops/gitlabrunner/node:20-bookworm
 
 variables:
   GIT_CLONE_PATH: $CI_BUILDS_DIR/$CI_PROJECT_PATH_SLUG/$CI_COMMIT_REF_SLUG
@@ -13,26 +14,24 @@ stages:
   - publish
   - deployCluster
 
-.template: &job_definition
+.branch_restriction: &branch_restriction
   only:
     - /^(feature-.*|hotfix-.*|main|release-.*)$/
+
+.template: &job_definition
+  <<: *branch_restriction
   tags:
     - linux-2.0
+  before_script:
+    - git config --global url."https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.virtualcitysystems.de/".insteadOf "ssh://git@gitlab.virtualcitysystems.de/"
+    - git config --global user.email "gitlab-ci@virtualcitysystems.de"
+    - git config --global user.name "Gitlab CI"
 
 build:
   <<: *job_definition
   script:
     - npm ci
     - npm run ensure-types
-  before_script:
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_RUNNER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan gitlab.virtualcitysystems.de >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - git config user.name "Gitlab Runner"
-    - git config user.email "gitlab-runner@vc.systems"
   stage: build
 
 .after_build_template: &after_build_definition
@@ -108,11 +107,12 @@ deployStaging:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
 
 stopEnvironment:
+  <<: *branch_restriction
   stage: deploy
   variables:
     GIT_STRATEGY: none
   image:
-    name: bitnami/kubectl:latest
+    name: gitlab.virtualcitysystems.de:5050/vcsuite/devops/gitlabrunner/kubectl:latest
     entrypoint: ['']
   tags:
     - linux-2.0
@@ -127,6 +127,7 @@ stopEnvironment:
     action: stop
 
 deployStagingCluster:
+  <<: *branch_restriction
   stage: deployCluster
   except:
     variables:
@@ -153,18 +154,9 @@ version:
   script:
     - npm version patch -m "%s [skip-ci]"
     - TAG=`git describe --abbrev=0`
-    - echo git push git@gitlab:vcsuite/"$CI_PROJECT_PATH".git
-    - git push git@gitlab:"$CI_PROJECT_PATH".git $TAG
-    - git push git@gitlab:"$CI_PROJECT_PATH".git HEAD:$CI_COMMIT_REF_NAME
-  before_script:
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_RUNNER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan gitlab >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - git config user.name "Gitlab Runner"
-    - git config user.email "gitlab-runner@vc.systems"
+    - echo git push https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.virtualcitysystems.de/"$CI_PROJECT_PATH".git
+    - git push https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.virtualcitysystems.de/"$CI_PROJECT_PATH".git $TAG
+    - git push https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.virtualcitysystems.de/"$CI_PROJECT_PATH".git HEAD:$CI_COMMIT_REF_NAME
 
 publish:
   <<: *after_build_definition
