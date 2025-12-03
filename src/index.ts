@@ -79,12 +79,16 @@ export default function createLink(): VcsPlugin<never, never> {
               const url = new URL(window.location.href);
               setStateToUrl(state, url);
               if (navigator.clipboard) {
-                await navigator.clipboard.writeText(url.toString());
-                app.notifier.add({
-                  title: 'createLink.title',
-                  message: 'createLink.copied',
-                  type: NotificationType.SUCCESS,
-                });
+                try {
+                  await navigator.clipboard.writeText(url.toString());
+                  app.notifier.add({
+                    title: 'createLink.title',
+                    message: 'createLink.copied',
+                    type: NotificationType.SUCCESS,
+                  });
+                } catch (e) {
+                  createFallbackWindow(app, url.toString());
+                }
               } else {
                 createFallbackWindow(app, url.toString());
               }
