@@ -109,6 +109,9 @@ deployStaging:
 stopEnvironment:
   <<: *branch_restriction
   stage: deploy
+  except:
+    variables:
+      - $PUBLISH
   variables:
     GIT_STRATEGY: none
   image:
